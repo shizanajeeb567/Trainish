@@ -1,6 +1,6 @@
 // src/api/chatAPI.js
 
-const API_BASE = "http://localhost:3001/api/chat";
+const API_BASE = `${process.env.REACT_APP_API_URL}/api/chat`;
 
 const getHeaders = () => ({
   "Content-Type": "application/json",

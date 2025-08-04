@@ -1,5 +1,5 @@
 // src/api/workoutAPI.js
-const API_BASE = "http://localhost:3001/api/workout-plans";
+const API_BASE = `${process.env.REACT_APP_API_URL}/api/workout-plans`;
 
 const getAuthHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("token")}`,
