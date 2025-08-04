@@ -3,7 +3,7 @@ require("dotenv").config();
 const axios = require("axios");
 const { MealPlan } = require("../models/mealPlan");
 const { GroceryList } = require("../models/GroceryList");
-const Profile = require("../models/profile");
+const Profile = require("../models/Profile");
 
 // Fixed calorie targets per goal
 const goalCalories = {
