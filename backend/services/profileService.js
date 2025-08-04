@@ -1,4 +1,4 @@
-const Profile = require('../models/Profile');
+const Profile = require('../models/profile');
 
 exports.createProfile = async (userId, profileData) => {
   const existing = await Profile.findOne({ where: { userId } });
