@@ -1,3 +1,4 @@
+const { Sequelize } = require('sequelize'); // ✅ THIS LINE IS MISSING
 require('dotenv').config();
 
 const sequelize = new Sequelize(
@@ -11,3 +12,5 @@ const sequelize = new Sequelize(
     logging: false,
   }
 );
+
+module.exports = sequelize;
