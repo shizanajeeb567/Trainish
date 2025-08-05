@@ -34,35 +34,50 @@ const createMealPlan = async (userId, startDate, cuisines = [], variationHint = 
   const dailyCalories = goalCalories[profile.goal] || 2000;
 
   const prompt = `
-You are a JSON Meal Plan Generator. Based on the user profile, create a 7-day meal plan.
+You are an AI meal planner. Generate a meal plan for the following user:
 
-# User Profile
 - Goal: ${profile.goal}
-- Daily Calorie Target: ${dailyCalories}
+- Daily Calorie Target: ${dailyCalories} kcal
 - Allergies: ${allergies.length ? allergies.join(", ") : "None"}
-- Cuisines: ${cuisines.length ? cuisines.join(", ") : "Any"}
-- Hint: ${variationHint || "None"}
+- Preferred Cuisines: ${cuisines.length ? cuisines.join(", ") : "Any"}
+- Duration: 1 week (Week 1 of 1)
+- Variation Hint: ${variationHint || "None"}
 
-# Instructions
-1.  Generate a response containing ONLY a valid JSON array.
-2.  Do not add any explanations or markdown formatting around the JSON.
-3.  The 'totalCalories' for each day must not exceed the user's target.
-4.  Adhere strictly to the following structure:
+Ensure the combined calories of breakfast, lunch, and dinner do not exceed ${dailyCalories} kcal.
 
-# JSON Schema
-- The root is an array of 7 Day objects.
-- Day Object:
-  - day: Number
-  - meals: Object containing 'breakfast', 'lunch', and 'dinner' keys.
-  - totalCalories: Number
-- Meal Object (for breakfast, lunch, dinner):
-  - recipeName: String
-  - calories: Number
-  - mealType: String ("breakfast", "lunch", or "dinner")
-  - cuisine: String
-  - ingredients: String (format: "Name (qty unit) (category), ...")
-  - macros: String (format: "Xg carbs, Yg protein, Zg fat")
-  - sides: String (optional)
+Include 7 days (Day 1 to Day 7). For each day, include:
+- breakfast, lunch, dinner
+
+Each meal should include:
+- recipeName
+- calories
+- mealType
+- cuisine
+- ingredients (comma-separated format: Name (qty unit) (category))
+- macros
+- sides (optional)
+
+Return ONLY valid JSON like this:
+
+[
+  {
+    "day": 1,
+    "meals": {
+      "breakfast": {
+        "recipeName": "Avocado Toast",
+        "calories": 300,
+        "mealType": "breakfast",
+        "cuisine": "American",
+        "ingredients": "Avocado (1 piece) (produce), Bread (2 slices) (grain)",
+        "macros": "20g carbs, 10g protein, 15g fat",
+        "sides": "Orange Juice"
+      },
+      "lunch": { ... },
+      "dinner": { ... }
+    },
+    "totalCalories": sum of all 3 meals
+  }
+]
 `;
 
   console.log("🍽️ Prompt length:", prompt.length);
