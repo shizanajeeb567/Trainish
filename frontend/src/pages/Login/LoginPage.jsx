@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
   return (
@@ -45,14 +46,17 @@ export default function LoginPage() {
             footerLinkTo="/signup"
           >
             <LoginForm
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              navigate={navigate}
-            />
+  email={email}
+  setEmail={setEmail}
+  password={password}
+  setPassword={setPassword}
+  showPassword={showPassword}
+  setShowPassword={setShowPassword}
+  navigate={navigate}
+  loading={loading}
+  setLoading={setLoading}
+/>
+
           </AuthCard>
 
           <Footer />

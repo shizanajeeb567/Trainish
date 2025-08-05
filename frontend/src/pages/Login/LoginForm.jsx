@@ -14,21 +14,27 @@ export default function LoginForm({
   showPassword,
   setShowPassword,
   navigate,
-}) {
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
-        email,
-        password,
-      });
+  loading,
+  setLoading,
+})
+ {
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // start loading
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+      email,
+      password,
+    });
+    localStorage.setItem("token", res.data.token);
+    navigate("/dashboard");
+  } catch (err) {
+    alert(err.response?.data?.error || "Login failed");
+  } finally {
+    setLoading(false); // stop loading if error
+  }
+};
 
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
-    } catch (err) {
-      alert(err.response?.data?.error || "Login failed");
-    }
-  };
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
@@ -59,11 +65,24 @@ export default function LoginForm({
       <RememberForgotRow />
 
       <Button
-        type="submit"
-        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white"
-      >
-        Sign In
-      </Button>
+  type="submit"
+  disabled={loading}
+  className={`w-full text-white ${
+    loading
+      ? "bg-gray-300 cursor-not-allowed"
+      : "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+  }`}
+>
+  {loading ? (
+    <div className="flex items-center justify-center gap-2">
+      <div className="animate-spin h-4 w-4 border-b-2 border-white rounded-full" />
+      Signing In...
+    </div>
+  ) : (
+    "Sign In"
+  )}
+</Button>
+
     </form>
   );
 }
