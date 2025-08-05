@@ -71,46 +71,51 @@ export default function AddWorkoutForm({
                 <Input
                   placeholder="e.g., Push-ups"
                   value={workout.exerciseName}
-                  onChange={(e) => updateNewWorkout(index, "exerciseName", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                    updateNewWorkout(index, "exerciseName", value);
+                  }}
                   className="border-purple-200 focus:border-purple-400"
                 />
               </div>
 
-               <div>
-    <Label className="text-sm font-medium text-gray-700 flex items-center">
-      <Hash className="h-4 w-4 mr-1" />
-      Sets
-    </Label>
-    <Input
-      type="number"
-      placeholder="3"
-      value={workout.sets}
-      min={0}
-      onChange={(e) => {
-        const value = Math.max(0, parseInt(e.target.value) || 0);
-        updateNewWorkout(index, "sets", value);
-      }}
-      className="border-purple-200 focus:border-purple-400"
-    />
-  </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-700 flex items-center">
+                  <Hash className="h-4 w-4 mr-1" />
+                  Sets
+                </Label>
+                <Input
+                  type="number"
+                  placeholder="3"
+                  value={workout.sets}
+                  min={1}
+                  max={10}
+                  onChange={(e) => {
+                    const value = Math.min(10, Math.max(1, parseInt(e.target.value) || 1));
+                    updateNewWorkout(index, "sets", value);
+                  }}
+                  className="border-purple-200 focus:border-purple-400"
+                />
+              </div>
 
-            <div>
-    <Label className="text-sm font-medium text-gray-700 flex items-center">
-      <Target className="h-4 w-4 mr-1" />
-      Reps
-    </Label>
-    <Input
-      type="number"
-      placeholder="15"
-      value={workout.reps}
-      min={0}
-      onChange={(e) => {
-        const value = Math.max(0, parseInt(e.target.value) || 0);
-        updateNewWorkout(index, "reps", value);
-      }}
-      className="border-purple-200 focus:border-purple-400"
-    />
-  </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-700 flex items-center">
+                  <Target className="h-4 w-4 mr-1" />
+                  Reps
+                </Label>
+                <Input
+                  type="number"
+                  placeholder="15"
+                  value={workout.reps}
+                  min={1}
+                  max={40}
+                  onChange={(e) => {
+                    const value = Math.min(40, Math.max(1, parseInt(e.target.value) || 1));
+                    updateNewWorkout(index, "reps", value);
+                  }}
+                  className="border-purple-200 focus:border-purple-400"
+                />
+              </div>
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 flex items-center">
@@ -118,9 +123,15 @@ export default function AddWorkoutForm({
                   Duration
                 </Label>
                 <Input
-                  placeholder="30 minutes"
+                  type="number"
+                  placeholder="30"
                   value={workout.duration}
-                  onChange={(e) => updateNewWorkout(index, "duration", e.target.value)}
+                  min={1}
+                  max={300}
+                  onChange={(e) => {
+                    const value = Math.min(300, Math.max(1, parseInt(e.target.value) || 1));
+                    updateNewWorkout(index, "duration", value);
+                  }}
                   className="border-purple-200 focus:border-purple-400"
                 />
               </div>
