@@ -1,5 +1,6 @@
 // pages/workoutplanGenerate/WorkoutPlanList.jsx
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,6 +17,16 @@ export default function WorkoutPlanList({
   loadingPlans,
   handleDeletePlan,
 }) {
+  const [expandedDays, setExpandedDays] = useState({});
+
+  const toggleDay = (weekIndex, dayIndex) => {
+    const key = `${weekIndex}-${dayIndex}`;
+    setExpandedDays((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -78,30 +89,44 @@ export default function WorkoutPlanList({
               {week.title}
             </h3>
             <div className="grid gap-4">
-              {week.days.map((day, j) => (
-                <div
-                  key={j}
-                  className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-100"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-gray-800 flex items-center">
-                      <Target className="h-4 w-4 mr-2 text-purple-600" />
-                      Day {day.dayNumber}: {day.title}
-                    </h4>
-                  </div>
-                  <div className="space-y-2">
-                    {day.exercises.map((exercise, k) => (
-                      <div
-                        key={k}
-                        className="flex items-start gap-3 p-3 bg-white/70 rounded-md border border-purple-100"
-                      >
-                        <div className="w-2 h-2 bg-purple-400 rounded-full mt-2" />
-                        <p className="text-gray-700 text-sm leading-relaxed">{exercise}</p>
+              {week.days.map((day, j) => {
+                const key = `${i}-${j}`;
+                const isOpen = expandedDays[key];
+
+                return (
+                  <div
+                    key={j}
+                    className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100"
+                  >
+                    <button
+                      onClick={() => toggleDay(i, j)}
+                      className="w-full text-left px-4 py-3 flex items-center justify-between"
+                    >
+                      <h4 className="text-lg font-semibold text-gray-800 flex items-center">
+                        <Target className="h-4 w-4 mr-2 text-purple-600" />
+                        Day {day.dayNumber}: {day.title}
+                      </h4>
+                      <span className="text-purple-600 text-sm font-medium">
+                        {isOpen ? "Hide" : "Show"}
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div className="space-y-2 px-4 pb-4">
+                        {day.exercises.map((exercise, k) => (
+                          <div
+                            key={k}
+                            className="flex items-start gap-3 p-3 bg-white/70 rounded-md border border-purple-100"
+                          >
+                            <div className="w-2 h-2 bg-purple-400 rounded-full mt-2" />
+                            <p className="text-gray-700 text-sm leading-relaxed">{exercise}</p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ))}
