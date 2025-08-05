@@ -10,6 +10,8 @@ import PageHeader from "../../components/ui/PageHeader";
 import ProfileIncompleteBanner from "./ProfileIncompleteBanner";
 import MealPlanForm from "./MealPlanForm";
 import MealPlanList from "./MealPlanList";
+import BackButton from "../../components/ui/BackButton";
+
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import ConfirmRegenerateDialog from "./ConfirmRegenerateDialog";
 import {
@@ -167,12 +169,17 @@ export default function MealGenerationPage() {
       />
 
       <main className="container mx-auto px-4 py-8">
-        <PageHeader
-          icon={Utensils}
-          title="Meal Plans"
-          subtitle="Generate and manage your personalized meal plans"
-          extraInfo="Make sure your profile is complete beforehand for accurate results"
-        />
+        <div className="flex items-center gap-4 mb-4">
+  <BackButton />
+  <PageHeader
+    icon={Utensils}
+    title="Meal Plans"
+    subtitle="Generate and manage your personalized meal plans"
+    extraInfo="Make sure your profile is complete beforehand for accurate results"
+    className="mb-0"
+  />
+</div>
+
 
         <ProfileIncompleteBanner profileComplete={profileComplete} />
 

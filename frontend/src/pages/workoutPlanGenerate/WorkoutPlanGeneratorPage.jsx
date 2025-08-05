@@ -3,6 +3,7 @@
 import Header from "../../components/ui/header";
 import HeaderButton from "../../components/ui/HeaderButton";
 import PageHeader from "../../components/ui/PageHeader";
+import BackButton from "../../components/ui/BackButton";
 
 import WorkoutPlanForm from "./WorkoutPlanForm";
 import WorkoutPlanList from "./WorkoutPlanList";
@@ -39,14 +40,16 @@ export default function WorkoutPlanGeneratorPage() {
       />
 
       <main className="w-full max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-              AI Workout Plans
-            </h1>
-            <p className="text-gray-600">Generate personalized workout plans powered by AI</p>
-          </div>
-        </div>
+        <div className="flex items-center gap-4 mb-6">
+  <BackButton />
+  <div>
+    <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+      AI Workout Plans
+    </h1>
+    <p className="text-gray-600">Generate personalized workout plans powered by AI</p>
+  </div>
+</div>
+
 
         <ProfileIncompleteBanner profileComplete={profileComplete} />
 

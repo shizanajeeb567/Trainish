@@ -10,6 +10,8 @@ import WorkoutLogSummary from "./WorkoutLogSummary";
 import AddWorkoutForm from "./AddWorkoutForm";
 import WorkoutLogList from "./WorkoutLogList";
 import { Dumbbell, Calendar } from "lucide-react";
+import BackButton from "../../components/ui/BackButton";
+
 import {
   fetchWorkoutLogs,
   saveWorkoutLogs,
@@ -114,11 +116,16 @@ export default function WorkoutLogPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <PageHeader
-            icon={Dumbbell}
-            title="Workout Log"
-            subtitle="Track your daily exercises and progress"
-          />
+          <div className="flex items-center gap-4 mb-4">
+  <BackButton />
+  <PageHeader
+    icon={Dumbbell}
+    title="Workout Log"
+    subtitle="Track your daily exercises and progress"
+    className="mb-0"
+  />
+</div>
+
           <div className="flex items-center gap-4 mt-4 md:mt-0">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-purple-600" />

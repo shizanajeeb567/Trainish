@@ -7,6 +7,8 @@ import WorkoutPlanFilters from "./WorkoutPlanFilters";
 import AddPlanForm from "./AddPlanForm";
 import WorkoutPlansList from "./WorkoutPlanList";
 import { getDateForWeek, getWeekDateRange } from "./utils/dateUtils";
+import BackButton from "../../components/ui/BackButton";
+
 
 import {
   fetchWorkoutPlans,
@@ -155,6 +157,12 @@ export default function WorkoutPlanPage() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       <WorkoutPlanHeader />
       <main className="container mx-auto px-4 py-8">
+  <div className="flex items-center gap-4 mb-4">
+    <BackButton />
+    <h1 className="text-2xl font-semibold text-gray-800">Workout Plans</h1>
+  </div>
+
+
         {errorMessage && (
           <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {errorMessage}

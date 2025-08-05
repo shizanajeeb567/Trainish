@@ -13,6 +13,7 @@ import NoProfileCard from "./NoProfileCard";
 import { User, Edit3 } from "lucide-react";
 import { getProfile, saveProfile } from "../../api/profileAPI";
 import { calculateAge } from "./utils";
+import BackButton from "../../components/ui/BackButton";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -115,11 +116,16 @@ export default function ProfilePage() {
 
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-          <PageHeader
-            icon={User}
-            title="My Profile"
-            subtitle="Manage your personal information and fitness goals"
-          />
+          <div className="flex items-center gap-4 mb-4">
+  <BackButton />
+  <PageHeader
+    icon={User}
+    title="My Profile"
+    subtitle="Manage your personal information and fitness goals"
+    className="mb-0"
+  />
+</div>
+
 
           {hasProfile && !isEditing && (
             <button
