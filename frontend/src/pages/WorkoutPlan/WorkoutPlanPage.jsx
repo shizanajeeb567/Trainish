@@ -7,6 +7,7 @@ import WorkoutPlanFilters from "./WorkoutPlanFilters";
 import AddPlanForm from "./AddPlanForm";
 import WorkoutPlansList from "./WorkoutPlanList";
 import { getDateForWeek, getWeekDateRange } from "./utils/dateUtils";
+
 import {
   fetchWorkoutPlans,
   createWorkoutPlan,
@@ -22,6 +23,9 @@ export default function WorkoutPlanPage() {
   const [isAddingPlan, setIsAddingPlan] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [deletingPlanId, setDeletingPlanId] = useState(null);
 
   const [newPlan, setNewPlan] = useState({
     dayOfWeek: "",
@@ -79,7 +83,7 @@ export default function WorkoutPlanPage() {
     try {
       const validExercises = newPlan.exercises.filter((ex) => ex.trim());
       if (!newPlan.dayOfWeek || !newPlan.focusArea || validExercises.length === 0) {
-        alert("Please fill in all required fields");
+        setErrorMessage("Please fill in all required fields.");
         return;
       }
 
@@ -98,10 +102,11 @@ export default function WorkoutPlanPage() {
         date: "",
       });
       setIsAddingPlan(false);
+      setErrorMessage("");
       fetchPlans();
     } catch (err) {
       console.error("Error saving plan:", err);
-      alert(err.error || "Failed to save plan");
+      setErrorMessage(err?.error || "Failed to save plan.");
     }
   };
 
@@ -113,22 +118,24 @@ export default function WorkoutPlanPage() {
         exercises: validExercises,
       });
       setEditingPlan(null);
+      setErrorMessage("");
       fetchPlans();
     } catch (err) {
       console.error("Error updating plan:", err);
-      alert(err.error || "Failed to update plan");
+      setErrorMessage(err?.error || "Failed to update plan.");
     }
   };
 
-  const handleDeletePlan = async (planId) => {
-    if (!window.confirm("Are you sure you want to delete this plan?")) return;
-
+  const handleDeletePlan = async () => {
     try {
-      await deleteWorkoutPlan(planId);
+      await deleteWorkoutPlan(deletingPlanId);
+      setShowConfirmDelete(false);
+      setDeletingPlanId(null);
+      setErrorMessage("");
       fetchPlans();
     } catch (err) {
       console.error("Error deleting plan:", err);
-      alert(err.error || "Failed to delete plan");
+      setErrorMessage(err?.error || "Failed to delete plan.");
     }
   };
 
@@ -139,10 +146,44 @@ export default function WorkoutPlanPage() {
     });
   };
 
+  const promptDeletePlan = (planId) => {
+    setShowConfirmDelete(true);
+    setDeletingPlanId(planId);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       <WorkoutPlanHeader />
       <main className="container mx-auto px-4 py-8">
+        {errorMessage && (
+          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {errorMessage}
+          </div>
+        )}
+
+        {showConfirmDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+              <h2 className="text-lg font-semibold text-gray-800 mb-3">Confirm Deletion</h2>
+              <p className="text-sm text-gray-600 mb-5">Are you sure you want to delete this workout plan?</p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowConfirmDelete(false)}
+                  className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeletePlan}
+                  className="px-4 py-2 text-sm rounded-md bg-red-500 text-white hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <WorkoutPlanFilters
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
@@ -163,6 +204,7 @@ export default function WorkoutPlanPage() {
           handleAddExercise={handleAddExercise}
           handleRemoveExercise={handleRemoveExercise}
           handleExerciseChange={handleExerciseChange}
+          existingPlans={plans}
         />
         <WorkoutPlansList
           plans={plans}
@@ -170,7 +212,7 @@ export default function WorkoutPlanPage() {
           setEditingPlan={setEditingPlan}
           handleEditPlan={handleEditPlan}
           handleUpdatePlan={handleUpdatePlan}
-          handleDeletePlan={handleDeletePlan}
+          handleDeletePlan={promptDeletePlan}
           loading={loading}
         />
       </main>

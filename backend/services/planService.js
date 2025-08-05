@@ -23,13 +23,27 @@ exports.createPlan = async (userId, planData) => {
 
   const { weekNumber, month, year } = getWeekInfo(date);
 
+  // Check for duplicate day in same week for this user
+  const existingPlan = await WorkoutPlan.findOne({
+    where: {
+      userId,
+      dayOfWeek,
+      weekNumber,
+      month,
+    },
+  });
+
+  if (existingPlan) {
+    throw new Error(`A plan already exists for ${dayOfWeek} in this week.`);
+  }
+
   const newPlan = await WorkoutPlan.create({
     userId,
     dayOfWeek,
     focusArea,
     exercises,
     totalDuration,
-      date,
+    date,
     weekNumber,
     month,
     year,
@@ -43,7 +57,7 @@ exports.getPlans = async (userId, filters = {}) => {
   const where = { userId };
 
   if (date) {
-    where.date = date; // ✅ exact match only
+    where.date = date; // exact match only
   }
 
   if (dayOfWeek) {

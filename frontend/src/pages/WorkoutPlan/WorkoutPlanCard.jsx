@@ -1,5 +1,6 @@
 // WorkoutPlans/WorkoutPlanCard.jsx
 
+import { useState } from "react";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -18,11 +19,28 @@ export default function WorkoutPlanCard({
   handleDeletePlan,
 }) {
   const isEditing = editingPlan?.id === plan.id;
+  const [localError, setLocalError] = useState("");
+
+  const handleLocalSave = () => {
+    const validExercises = editingPlan.exercises.filter((ex) => ex.trim());
+    if (!editingPlan.dayOfWeek || !editingPlan.focusArea || validExercises.length === 0) {
+      setLocalError("All fields including at least one exercise are required.");
+      return;
+    }
+    setLocalError("");
+    handleUpdatePlan();
+  };
 
   if (isEditing) {
     return (
       <Card className="border-0 bg-white/70 backdrop-blur-sm hover:shadow-lg transition-shadow">
         <CardContent className="p-6 space-y-4">
+          {localError && (
+            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
+              {localError}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm font-medium text-gray-700">Day of Week</Label>
@@ -49,7 +67,6 @@ export default function WorkoutPlanCard({
             </div>
           </div>
 
-          {/* Edit Exercises */}
           <div>
             <Label className="text-sm font-medium text-gray-700 mb-2 block">Exercises</Label>
             {editingPlan.exercises.map((exercise, index) => (
@@ -107,7 +124,7 @@ export default function WorkoutPlanCard({
 
           <div className="flex gap-3">
             <Button
-              onClick={handleUpdatePlan}
+              onClick={handleLocalSave}
               size="sm"
               className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
             >
@@ -123,7 +140,6 @@ export default function WorkoutPlanCard({
     );
   }
 
-  // VIEW MODE
   return (
     <Card className="border-0 bg-white/70 backdrop-blur-sm hover:shadow-lg transition-shadow">
       <CardContent className="p-6">
