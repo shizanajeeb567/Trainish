@@ -84,17 +84,26 @@ export default function ProfileForm({
         <div>
           <Label htmlFor="height" className="text-sm font-medium text-gray-700 flex items-center mb-2">
             <Target className="h-4 w-4 mr-1" />
-            Height (cm or ft) *
+            Height (in cm) *
           </Label>
-          <Input
-  id="height"
-  type="text"
-  placeholder="e.g., 5'8&quot; or 175cm"
-  value={formData.height}
-  onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-  className="border-purple-200 focus:border-purple-400"
-/>
-
+          <div className="relative">
+            <Input
+              id="height"
+              type="number"
+              placeholder="e.g., 175"
+              value={formData.height}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d{0,3}$/.test(value)) {
+                  setFormData({ ...formData, height: value });
+                }
+              }}
+              className="border-purple-200 focus:border-purple-400 pr-12"
+              min="30"
+              max="300"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-600">cm</span>
+          </div>
         </div>
       </div>
 
