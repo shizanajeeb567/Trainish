@@ -18,7 +18,7 @@ const goalCalories = {
 // Helpers
 const getEndDate = (startDate) => {
   const start = new Date(startDate);
-  start.setDate(start.getDate() + 7);
+  start.setDate(start.getDate() + 3);
   return start.toISOString().split("T")[0];
 };
 
@@ -45,7 +45,7 @@ You are an AI meal planner. Generate a meal plan for the following user:
 
 Ensure the combined calories of breakfast, lunch, and dinner do not exceed ${dailyCalories} kcal.
 
-Include 7 days (Day 1 to Day 7). For each day, include:
+Include 3 days (Day 1 to Day 3). For each day, include:
 - breakfast, lunch, dinner
 
 Each meal should include:
