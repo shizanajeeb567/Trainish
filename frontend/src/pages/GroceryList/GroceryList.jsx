@@ -173,9 +173,6 @@ export default function GroceryList() {
                 <List className="mr-2 h-5 w-5 text-purple-600" />
                 Your Shopping List
               </CardTitle>
-              <CardDescription className="text-gray-600">
-                Meal Plan ID: {mealPlanId}
-              </CardDescription>
             </CardHeader>
             <CardContent>
               {Object.entries(groupedItems)
