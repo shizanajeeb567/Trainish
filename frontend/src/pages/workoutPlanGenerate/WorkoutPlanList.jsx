@@ -107,7 +107,7 @@ export default function WorkoutPlanList({
                         Day {day.dayNumber}: {day.title}
                       </h4>
                       <span className="text-purple-600 text-sm font-medium">
-                        {isOpen ? "Hide" : "Show"}
+                        {isOpen ? "▲" : "▼"}
                       </span>
                     </button>
 
