@@ -42,24 +42,6 @@ export default function WorkoutPlanFilters({
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Year */}
-          <div>
-            <Label htmlFor="year" className="text-sm font-medium text-gray-700">
-              Year
-            </Label>
-            <select
-              id="year"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="w-full h-10 px-3 py-2 border border-purple-200 rounded-md focus:border-purple-400 focus:ring-purple-400 bg-white"
-            >
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
 
           {/* Month */}
           <div>

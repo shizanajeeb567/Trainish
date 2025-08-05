@@ -9,8 +9,7 @@ import Profile from "./pages/Profile/ProfilePage";
 import MealGeneration from "./pages/MealGeneration/MealGenerationPage";
 import GroceryList from "./pages/GroceryList/GroceryList";
 import Chatbot from "./pages/Chatbot/Chatbot";
-import WorkoutPlanGeneration from "./pages/workoutPlanGenerate/WorkoutPlanGeneratorPage";
-import VisualStats from "./pages/visualStats";   
+import WorkoutPlanGeneration from "./pages/workoutPlanGenerate/WorkoutPlanGeneratorPage"; 
 import "./styles/global.css";
 
 function App() {
@@ -27,8 +26,7 @@ function App() {
         <Route path="/meal-generation" element={<MealGeneration />} />
         <Route path="/grocery-list" element={<GroceryList />} />
         <Route path="/chatbot" element={<Chatbot />} />
-        <Route path="/smart-workouts" element={<WorkoutPlanGeneration />} />
-        <Route path="/visual-stats" element={<VisualStats />} />     
+        <Route path="/smart-workouts" element={<WorkoutPlanGeneration />} /> 
       </Routes>
     </div>
   );

@@ -14,7 +14,6 @@ export default function AddPlanForm({
   setIsAddingPlan,
   newPlan,
   setNewPlan,
-  selectedYear,
   selectedMonth,
   selectedWeek,
   handleSavePlan,
@@ -59,7 +58,7 @@ export default function AddPlanForm({
           Create New Workout Plan
         </CardTitle>
         <CardDescription>
-          Add a workout plan for {months[selectedMonth]} {selectedYear}, Week {selectedWeek}
+            Add a workout plan for {months[selectedMonth]}, Week {selectedWeek}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
