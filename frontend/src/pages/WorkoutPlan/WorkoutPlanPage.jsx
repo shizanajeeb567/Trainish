@@ -4,7 +4,6 @@
 import { useState, useEffect } from "react";
 import WorkoutPlanHeader from "./WorkoutPlanHeader";
 import WorkoutPlanFilters from "./WorkoutPlanFilters";
-import WorkoutPlanSummary from "./WorkoutPlanSummary";
 import AddPlanForm from "./AddPlanForm";
 import WorkoutPlansList from "./WorkoutPlanList";
 import { getDateForWeek, getWeekDateRange } from "./utils/dateUtils";
@@ -151,12 +150,6 @@ export default function WorkoutPlanPage() {
           setSelectedYear={setSelectedYear}
           setSelectedMonth={setSelectedMonth}
           setSelectedWeek={setSelectedWeek}
-        />
-        <WorkoutPlanSummary
-          selectedYear={selectedYear}
-          selectedMonth={selectedMonth}
-          selectedWeek={selectedWeek}
-          plans={plans}
         />
         <AddPlanForm
           isAddingPlan={isAddingPlan}
