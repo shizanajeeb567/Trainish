@@ -6,8 +6,9 @@ import {
   CardContent,
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
-import { List, RefreshCw, Trash2, Utensils } from "lucide-react";
+import { List, RefreshCw, Trash2, Utensils, FileDown } from "lucide-react";
 import { formatDate } from "./utils";
+import { exportMealPlanToPDF } from "./utils/exportMealPlanToPDF";
 
 export default function MealPlanCard({
   plan,
@@ -42,35 +43,58 @@ export default function MealPlanCard({
               Select the start date and preferred cuisines for your 3-day plan.
             </CardDescription>
           </div>
-          <div className="flex gap-2">
-            <div className="relative group">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onRegeneratePlan(plan.id)}
-                disabled={plan.regenerationCount >= 2}
-                className={`border-purple-200 text-purple-600 hover:bg-purple-50 ${
-                  plan.regenerationCount >= 2 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                <RefreshCw className="h-4 w-4" />
-              </Button>
-              {plan.regenerationCount >= 2 && (
-                <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  You can regenerate only 2 times
-                </div>
-              )}
-            </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDeletePlan(plan.id)}
-              className="border-red-200 text-red-600 hover:bg-red-50"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+          {/* Updated Button Row with PDF Download */}
+          <div className="flex gap-2 items-center">
+  {/* Download PDF Button with Tooltip */}
+  <div className="relative group">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => exportMealPlanToPDF(plan)}
+      className="border-blue-200 text-blue-600 hover:bg-blue-50"
+    >
+      <FileDown className="h-4 w-4" />
+    </Button>
+    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+      Download PDF
+    </div>
+  </div>
+
+  {/* Regenerate Button with Tooltip */}
+  <div className="relative group">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => onRegeneratePlan(plan.id)}
+      disabled={plan.regenerationCount >= 2}
+      className={`border-purple-200 text-purple-600 hover:bg-purple-50 ${
+        plan.regenerationCount >= 2 ? "opacity-50 cursor-not-allowed" : ""
+      }`}
+    >
+      <RefreshCw className="h-4 w-4" />
+    </Button>
+    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+      Regenerate Plan
+    </div>
+  </div>
+
+  {/* Delete Button with Tooltip */}
+  <div className="relative group">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => onDeletePlan(plan.id)}
+      className="border-red-200 text-red-600 hover:bg-red-50"
+    >
+      <Trash2 className="h-4 w-4" />
+    </Button>
+    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+      Delete Plan
+    </div>
+  </div>
+</div>
+
         </div>
       </CardHeader>
 
