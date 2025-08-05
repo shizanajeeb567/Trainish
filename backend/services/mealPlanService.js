@@ -7,13 +7,40 @@ const Profile = require("../models/Profile");
 
 // Fixed calorie targets per goal
 const goalCalories = {
-  "Weight Loss": 1500,
-  "Muscle Gain": 2500,
-  "Maintain Weight": 2000,
-  "Improve Endurance": 2200,
-  "General Fitness": 2100,
-  "Strength Training": 2400,
+  "Weight Loss": {
+    male: { min: 1500, max: 1600 },
+    female: { min: 1200, max: 1400 },
+    other: { min: 1200, max: 1400 }
+  },
+  "Muscle Gain": {
+    male: { min: 3000, max: 3500 },
+    female: { min: 2500, max: 2800 },
+    other: { min: 2500, max: 2800 }
+  },
+  "Maintain Weight": {
+    male: { min: 2200, max: 2400 },
+    female: { min: 1800, max: 2000 },
+    other: { min: 1800, max: 2000 }
+  },
+  "Improve Endurance": {
+    male: { min: 2300, max: 2500 },
+    female: { min: 2000, max: 2200 },
+    other: { min: 2000, max: 2200 }
+  },
+  "General Fitness": {
+    male: { min: 2100, max: 2300 },
+    female: { min: 1900, max: 2100 },
+    other: { min: 1900, max: 2100 }
+  },
+  "Strength Training": {
+    male: { min: 2600, max: 2800 },
+    female: { min: 2200, max: 2400 },
+    other: { min: 2200, max: 2400 }
+  },
 };
+
+
+
 
 // Helpers
 const getEndDate = (startDate) => {
@@ -31,19 +58,24 @@ const createMealPlan = async (userId, startDate, cuisines = [], variationHint = 
 
   const endDate = getEndDate(startDate);
   const allergies = profile.foodAllergies?.split(",").map((a) => a.trim()) || [];
-  const dailyCalories = goalCalories[profile.goal] || 2000;
+ const gender = profile.gender.toLowerCase();
+const caloriesForGoal = goalCalories[profile.goal][gender];
+const minCalories = caloriesForGoal.min;
+const maxCalories = caloriesForGoal.max;
+
+
 
   const prompt = `
 You are an AI meal planner. Generate a meal plan for the following user:
 
 - Goal: ${profile.goal}
-- Daily Calorie Target: ${dailyCalories} kcal
+- Daily Calorie Range: ${minCalories} to ${maxCalories} kcal
 - Allergies: ${allergies.length ? allergies.join(", ") : "None"}
 - Preferred Cuisines: ${cuisines.length ? cuisines.join(", ") : "Any"}
 - Duration: 1 week (Week 1 of 1)
 - Variation Hint: ${variationHint || "None"}
 
-Ensure the combined calories of breakfast, lunch, and dinner do not exceed ${dailyCalories} kcal.
+Ensure the combined calories of breakfast, lunch, and dinner stay **between** ${minCalories} and ${maxCalories} kcal.
 
 Include 3 days (Day 1 to Day 3). For each day, include:
 - breakfast, lunch, dinner
@@ -108,10 +140,10 @@ Return ONLY valid JSON like this:
     } catch (error) {
       attempts++;
       if (attempts >= maxAttempts) {
-        console.error("❌ Groq timeout after retry:", error.message);
-        throw new Error("Groq API timed out during meal plan generation.");
+        console.error("Groq timeout after retry:", error.message);
+        throw new Error("Too many reqiests at the same time, wait for 2-3 minutes before sending another request.");
       }
-      console.warn("⏳ Retrying Groq API...");
+      console.warn("Retrying Groq API...");
       await delay(1000);
     }
   }

@@ -24,6 +24,8 @@ export default function WorkoutLogPage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [isAddingWorkout, setIsAddingWorkout] = useState(false);
   const [editingLog, setEditingLog] = useState(null);
+  const [errors, setErrors] = useState([]);
+
   const [newWorkouts, setNewWorkouts] = useState([
     { exerciseName: "", sets: "", reps: "", duration: "" },
   ]);
@@ -58,27 +60,45 @@ export default function WorkoutLogPage() {
   };
 
   const handleSaveWorkouts = async () => {
-    const validWorkouts = newWorkouts
-      .filter((w) => w.exerciseName.trim())
-      .map((w) => ({
-        exerciseName: w.exerciseName.trim(),
-        sets: w.sets ? parseInt(w.sets) : null,
-        reps: w.reps ? parseInt(w.reps) : null,
-        duration: w.duration || null,
-        date: selectedDate,
-      }));
+  const newErrors = [];
 
-    if (validWorkouts.length === 0) return;
+  newWorkouts.forEach((workout, i) => {
+    const workoutErrors = {};
+    if (!workout.exerciseName.trim()) workoutErrors.exerciseName = "Exercise name is required.";
+    if (!/^[a-zA-Z\s]+$/.test(workout.exerciseName)) workoutErrors.exerciseName = "Only letters and spaces allowed.";
+    if (!workout.sets || workout.sets < 1 || workout.sets > 10) workoutErrors.sets = "Sets must be between 1 and 10.";
+    if (!workout.reps || workout.reps < 1 || workout.reps > 40) workoutErrors.reps = "Reps must be between 1 and 40.";
+    if (!workout.duration || workout.duration < 1 || workout.duration > 300) workoutErrors.duration = "Duration must be between 1 and 300 minutes.";
 
-    try {
-      const newLogs = await saveWorkoutLogs(validWorkouts);
-      setLogs([...logs, ...newLogs]);
-      setNewWorkouts([{ exerciseName: "", sets: "", reps: "", duration: "" }]);
-      setIsAddingWorkout(false);
-    } catch (error) {
-      console.error("Failed to save workouts:", error.response?.data || error.message);
-    }
-  };
+    newErrors[i] = workoutErrors;
+  });
+
+  const hasErrors = newErrors.some((e) => Object.keys(e).length > 0);
+  if (hasErrors) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors([]);
+
+  const validWorkouts = newWorkouts.map((w) => ({
+    exerciseName: w.exerciseName.trim(),
+    sets: parseInt(w.sets),
+    reps: parseInt(w.reps),
+    duration: parseInt(w.duration),
+    date: selectedDate,
+  }));
+
+  try {
+    const newLogs = await saveWorkoutLogs(validWorkouts);
+    setLogs([...logs, ...newLogs]);
+    setNewWorkouts([{ exerciseName: "", sets: "", reps: "", duration: "" }]);
+    setIsAddingWorkout(false);
+  } catch (error) {
+    console.error("Failed to save workouts:", error.response?.data || error.message);
+  }
+};
+
 
   const handleEditLog = (log) => {
     setEditingLog({
@@ -155,6 +175,8 @@ export default function WorkoutLogPage() {
           updateNewWorkout={updateNewWorkout}
           handleSaveWorkouts={handleSaveWorkouts}
           selectedDate={selectedDate}
+          errors={errors}
+
         />
 
         <WorkoutLogList

@@ -26,6 +26,7 @@ export default function ProfilePage() {
     foodAllergies: "",
   });
 
+  const [formErrors, setFormErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -62,13 +63,30 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
+    const errors = {};
+    if (!formData.gender) errors.gender = "Gender is required.";
+    if (!formData.dateOfBirth) errors.dateOfBirth = "Date of birth is required.";
+    if (!formData.weight || isNaN(formData.weight) || formData.weight < 1 || formData.weight > 500) {
+      errors.weight = "Weight must be between 1 and 500 kg.";
+    }
+    if (!formData.height || isNaN(formData.height) || formData.height < 30 || formData.height > 300) {
+      errors.height = "Height must be between 30 and 300 cm.";
+    }
+    if (!formData.goal) errors.goal = "Fitness goal is required.";
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     setSaving(true);
     try {
       const profileData = {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         weight: parseInt(formData.weight),
-        height: formData.height,
+        height: parseInt(formData.height),
         goal: formData.goal,
         foodAllergies: formData.foodAllergies || "N/A",
       };
@@ -96,6 +114,7 @@ export default function ProfilePage() {
       goal: profile.goal,
       foodAllergies: profile.foodAllergies || "N/A",
     });
+    setFormErrors({});
   };
 
   if (loading) {
@@ -111,21 +130,19 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
-      <Header
-      />
+      <Header />
 
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div className="flex items-center gap-4 mb-4">
-  <BackButton />
-  <PageHeader
-    icon={User}
-    title="My Profile"
-    subtitle="Manage your personal information and fitness goals"
-    className="mb-0"
-  />
-</div>
-
+            <BackButton />
+            <PageHeader
+              icon={User}
+              title="My Profile"
+              subtitle="Manage your personal information and fitness goals"
+              className="mb-0"
+            />
+          </div>
 
           {hasProfile && !isEditing && (
             <button
@@ -147,6 +164,7 @@ export default function ProfilePage() {
               handleSave={handleSave}
               handleCancel={handleCancel}
               hasProfile={hasProfile}
+              formErrors={formErrors}
             />
           ) : hasProfile ? (
             <ProfileView profile={profile} />

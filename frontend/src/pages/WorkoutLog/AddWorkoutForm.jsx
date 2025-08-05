@@ -17,6 +17,7 @@ export default function AddWorkoutForm({
   updateNewWorkout,
   handleSaveWorkouts,
   selectedDate,
+  errors
 }) {
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("en-US", {
@@ -77,6 +78,8 @@ export default function AddWorkoutForm({
                   }}
                   className="border-purple-200 focus:border-purple-400"
                 />
+                {errors?.[index]?.exerciseName && <p className="text-red-600 text-xs mt-1">{errors[index].exerciseName}</p>}
+
               </div>
 
               <div>
@@ -85,56 +88,72 @@ export default function AddWorkoutForm({
                   Sets
                 </Label>
                 <Input
-                  type="number"
-                  placeholder="3"
-                  value={workout.sets}
-                  min={1}
-                  max={10}
-                  onChange={(e) => {
-                    const value = Math.min(10, Math.max(1, parseInt(e.target.value) || 1));
-                    updateNewWorkout(index, "sets", value);
-                  }}
-                  className="border-purple-200 focus:border-purple-400"
-                />
+  type="number"
+  inputMode="numeric"
+  pattern="[0-9]*"
+  placeholder="3"
+  value={workout.sets}
+  onKeyDown={(e) => {
+    if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+  }}
+  onChange={(e) => {
+    updateNewWorkout(index, "sets", e.target.value);
+  }}
+  className={`border-purple-200 focus:border-purple-400 ${errors?.[index]?.sets ? 'border-red-500' : ''}`}
+/>
+{errors?.[index]?.sets && <p className="text-red-600 text-xs mt-1">{errors[index].sets}</p>}
+
               </div>
 
-              <div>
-                <Label className="text-sm font-medium text-gray-700 flex items-center">
-                  <Target className="h-4 w-4 mr-1" />
-                  Reps
-                </Label>
-                <Input
-                  type="number"
-                  placeholder="15"
-                  value={workout.reps}
-                  min={1}
-                  max={40}
-                  onChange={(e) => {
-                    const value = Math.min(40, Math.max(1, parseInt(e.target.value) || 1));
-                    updateNewWorkout(index, "reps", value);
-                  }}
-                  className="border-purple-200 focus:border-purple-400"
-                />
-              </div>
+<div>
+  <Label className="text-sm font-medium text-gray-700 flex items-center">
+    <Target className="h-4 w-4 mr-1" />
+    Reps
+  </Label>
+  <Input
+    type="number"
+    inputMode="numeric"
+    pattern="[0-9]*"
+    placeholder="15"
+    value={workout.reps}
+    min={1}
+    max={40}
+    onKeyDown={(e) => {
+      if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+    }}
+    onChange={(e) => updateNewWorkout(index, "reps", e.target.value)}
+    className={`border-purple-200 focus:border-purple-400 ${errors?.[index]?.reps ? "border-red-500" : ""}`}
+  />
+  {errors?.[index]?.reps && (
+    <p className="text-red-600 text-xs mt-1">{errors[index].reps}</p>
+  )}
+</div>
 
-              <div>
-                <Label className="text-sm font-medium text-gray-700 flex items-center">
-                  <Clock className="h-4 w-4 mr-1" />
-                  Duration
-                </Label>
-                <Input
-                  type="number"
-                  placeholder="30"
-                  value={workout.duration}
-                  min={1}
-                  max={300}
-                  onChange={(e) => {
-                    const value = Math.min(300, Math.max(1, parseInt(e.target.value) || 1));
-                    updateNewWorkout(index, "duration", value);
-                  }}
-                  className="border-purple-200 focus:border-purple-400"
-                />
-              </div>
+
+             <div>
+  <Label className="text-sm font-medium text-gray-700 flex items-center">
+    <Clock className="h-4 w-4 mr-1" />
+    Duration
+  </Label>
+  <Input
+    type="number"
+    inputMode="numeric"
+    pattern="[0-9]*"
+    placeholder="30"
+    value={workout.duration}
+    min={1}
+    max={300}
+    onKeyDown={(e) => {
+      if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
+    }}
+    onChange={(e) => updateNewWorkout(index, "duration", e.target.value)}
+    className={`border-purple-200 focus:border-purple-400 ${errors?.[index]?.duration ? "border-red-500" : ""}`}
+  />
+  {errors?.[index]?.duration && (
+    <p className="text-red-600 text-xs mt-1">{errors[index].duration}</p>
+  )}
+</div>
+
             </div>
           </div>
         ))}
