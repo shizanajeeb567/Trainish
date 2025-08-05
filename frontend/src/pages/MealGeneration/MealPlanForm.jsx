@@ -86,14 +86,16 @@ export default function MealPlanForm({
             <Label htmlFor="startDate" className="text-sm font-medium text-gray-700">
               Start Date *
             </Label>
-            <Input
+           <Input
   id="startDate"
   type="date"
   value={startDate}
   onChange={(e) => setStartDate(e.target.value)}
-              className="border-purple-200 focus:border-purple-400"
-              required
-            />
+  min={new Date().toISOString().split("T")[0]}
+  className="border-purple-200 focus:border-purple-400"
+  required
+/>
+
           </div>
 
           <div>

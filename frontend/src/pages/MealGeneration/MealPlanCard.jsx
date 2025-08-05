@@ -156,7 +156,7 @@ export default function MealPlanCard({
               className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
             >
               <List className="mr-2 h-4 w-4" />
-              Generate Grocery List
+              View Grocery List
             </Button>
           </div>
         )}
