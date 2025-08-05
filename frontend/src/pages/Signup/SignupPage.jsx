@@ -18,17 +18,22 @@ export default function SignupPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await signup({ email, password, username });
-      localStorage.setItem("token", data.token);
-      navigate("/dashboard");
-    } catch (err) {
-      alert(err.response?.data?.error || "Signup failed");
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const data = await signup({ email, password, username });
+    localStorage.setItem("token", data.token);
+    navigate("/dashboard");
+  } catch (err) {
+    alert(err.response?.data?.error || "Signup failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
@@ -57,16 +62,18 @@ export default function SignupPage() {
             footerLinkTo="/login"
           >
             <SignupForm
-              email={email}
-              setEmail={setEmail}
-              username={username}
-              setUsername={setUsername}
-              password={password}
-              setPassword={setPassword}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              handleSubmit={handleSubmit}
-            />
+  email={email}
+  setEmail={setEmail}
+  username={username}
+  setUsername={setUsername}
+  password={password}
+  setPassword={setPassword}
+  showPassword={showPassword}
+  setShowPassword={setShowPassword}
+  handleSubmit={handleSubmit}
+  loading={loading}
+/>
+
           </AuthCard>
           <Footer />
         </div>

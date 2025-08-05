@@ -17,7 +17,9 @@ export default function SignupForm({
   showPassword,
   setShowPassword,
   handleSubmit,
-}) {
+  loading
+})
+ {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Username */}
@@ -65,13 +67,28 @@ export default function SignupForm({
       <TermsCheckbox />
 
       {/* Submit */}
-      <Button
-        type="submit"
-        className="w-full h-12 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-      >
-        Create Account
-        <ArrowRight className="ml-2 h-5 w-5" />
-      </Button>
+     <Button
+  type="submit"
+  disabled={loading}
+  className={`w-full h-12 text-white shadow-lg transition-all duration-300 transform ${
+    loading
+      ? "bg-gray-300 cursor-not-allowed"
+      : "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 hover:shadow-xl hover:scale-105"
+  }`}
+>
+  {loading ? (
+    <div className="flex items-center justify-center gap-2">
+      <div className="animate-spin h-4 w-4 border-b-2 border-white rounded-full" />
+      Creating...
+    </div>
+  ) : (
+    <>
+      Create Account
+      <ArrowRight className="ml-2 h-5 w-5" />
+    </>
+  )}
+</Button>
+
     </form>
   );
 }
