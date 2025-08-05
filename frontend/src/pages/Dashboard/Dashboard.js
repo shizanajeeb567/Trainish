@@ -40,9 +40,9 @@ export default function Dashboard() {
 
 
          {/* Feature Cards Grid */}
-<div className="max-w-6xl mx-auto px-4">
-  {/* First Row - 4 cards */}
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+<div className="max-w-7xl mx-auto px-4">
+  {/* First Row - 4 wider cards */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
 
     <FeatureCard
       icon={Calendar}
@@ -85,8 +85,8 @@ export default function Dashboard() {
     />
   </div>
 
-  {/* Second Row - 3 cards centered */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+  {/* Second Row - 2 cards wider and centered */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
 
     <FeatureCard
       icon={Target}
@@ -110,6 +110,7 @@ export default function Dashboard() {
 
   </div>
 </div>
+
 
            {/* Footer */}
       <Footer withLogo={true} withBackground={true} />
