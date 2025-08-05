@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "../../components/ui/button"
 import Header from "../../components/ui/header"
-import PageHeader from "../../components/ui/PageHeader";
+import PageHeader from "../../components/ui/PageHeader"
 import HeaderButton from "../../components/ui/HeaderButton"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
 import { Send, MessageCircle, Loader2, Info } from "lucide-react"
-import { fetchChatHistory, sendChatMessage, clearChatHistory } from "../../api/chatAPI";
+import { fetchChatHistory, sendChatMessage, clearChatHistory } from "../../api/chatAPI"
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([])
@@ -16,6 +16,7 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const messagesEndRef = useRef(null)
+  const inputRef = useRef(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -23,100 +24,86 @@ export default function Chatbot() {
 
   useEffect(() => {
     scrollToBottom()
+    inputRef.current?.focus()
   }, [messages])
 
   useEffect(() => {
-  const fetchHistory = async () => {
-    try {
-      const data = await fetchChatHistory();
-      const formatted = data.messages.map((m) => ({
-        sender: m.sender,
-        text: m.text,
-      }));
-      setMessages(formatted);
-    } catch (err) {
-      console.error("Failed to load history", err);
+    const fetchHistory = async () => {
+      try {
+        const data = await fetchChatHistory()
+        const formatted = data.messages.map((m) => ({
+          sender: m.sender,
+          text: m.text,
+        }))
+        setMessages(formatted)
+      } catch (err) {
+        console.error("Failed to load history", err)
+      }
     }
-  };
 
-  fetchHistory();
-}, []);
-
-
-
+    fetchHistory()
+  }, [])
 
   const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!inputMessage.trim()) return;
+    e.preventDefault()
+    if (!inputMessage.trim()) return
 
-  const userMessage = { sender: "user", text: inputMessage };
-  setMessages((prev) => [...prev, userMessage]);
-  setInputMessage("");
-  setLoading(true);
-  setError(null);
+    const userMessage = { sender: "user", text: inputMessage }
+    setMessages((prev) => [...prev, userMessage])
+    setInputMessage("")
+    setLoading(true)
+    setError(null)
 
-  try {
-    const data = await sendChatMessage(inputMessage);
-    setMessages((prev) => [...prev, { sender: "ai", text: data.reply }]);
-  } catch (err) {
-    const fallback = {
-      sender: "ai",
-      text: err.error || "Sorry, I couldn't get a response. Please try again.",
-    };
-    setError(err.error || "Failed to get AI response.");
-    setMessages((prev) => [...prev, fallback]);
-  } finally {
-    setLoading(false);
+    try {
+      const data = await sendChatMessage(inputMessage)
+      setMessages((prev) => [...prev, { sender: "ai", text: data.reply }])
+    } catch (err) {
+      const fallback = {
+        sender: "ai",
+        text: err.error || "Sorry, I couldn't get a response. Please try again.",
+      }
+      setError(err.error || "Failed to get AI response.")
+      setMessages((prev) => [...prev, fallback])
+    } finally {
+      setLoading(false)
+    }
   }
-};
 
-const handleClearChat = async () => {
-  //const confirmed = window.confirm("Are you sure you want to clear your chat?");
-  //if (!confirmed) return;
-
-  try {
-    await clearChatHistory();
-    setMessages([]); // Clear UI
-  } catch (err) {
-    console.error("Failed to clear chat", err);
-    alert("Something went wrong while clearing chat.");
+  const handleClearChat = async () => {
+    try {
+      await clearChatHistory()
+      setMessages([])
+    } catch (err) {
+      console.error("Failed to clear chat", err)
+      alert("Something went wrong while clearing chat.")
+    }
   }
-};
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 flex flex-col">
-      {/* Header */}
-     <Header
-/>
-
+      <Header />
 
       <main className="container mx-auto px-4 py-4 flex-1 flex flex-col max-w-3xl overflow-hidden">
+        <PageHeader
+          icon={MessageCircle}
+          title="AI Fitness Chatbot"
+          subtitle="Ask me anything about fitness, nutrition, or your workouts!"
+        />
+        <div className="flex justify-end mb-2">
+          <Button
+            onClick={handleClearChat}
+            className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white"
+            variant="outline"
+          >
+            Clear Chat
+          </Button>
+        </div>
 
-        {/* Page Header */}
-       <PageHeader
-  icon={MessageCircle}
-  title="AI Fitness Chatbot"
-  subtitle="Ask me anything about fitness, nutrition, or your workouts!"
-/>
-<div className="flex justify-end mb-2">
-  <Button
-    onClick={handleClearChat}
-    className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white"
-    variant="outline"
-  >
-    Clear Chat
-  </Button>
-</div>
-
-
-        {/* Chat Area */}
         <Card className="flex-1 flex flex-col border-0 bg-white/70 backdrop-blur-sm shadow-xl overflow-hidden">
           <CardHeader className="pb-0">
             <CardTitle className="text-xl text-gray-800">Conversation</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[70vh]">
-
             {messages.length === 0 && (
               <div className="text-center text-gray-500 py-10">
                 <MessageCircle className="h-12 w-12 mx-auto mb-4" />
@@ -155,9 +142,9 @@ const handleClearChat = async () => {
             <div ref={messagesEndRef} />
           </CardContent>
           <div className="p-4 border-t border-purple-100 mt-auto">
-
             <form onSubmit={handleSendMessage} className="flex gap-2">
               <Input
+                ref={inputRef}
                 type="text"
                 placeholder="Type your message..."
                 value={inputMessage}
