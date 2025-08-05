@@ -5,7 +5,6 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { ArrowRight, User } from "lucide-react";
 import PasswordInput from "./PasswordInput";
-import TermsCheckbox from "./TermsCheckbox";
 
 export default function SignupForm({
   email,
@@ -62,9 +61,6 @@ export default function SignupForm({
         showPassword={showPassword}
         setShowPassword={setShowPassword}
       />
-
-      {/* Terms */}
-      <TermsCheckbox />
 
       {/* Submit */}
      <Button

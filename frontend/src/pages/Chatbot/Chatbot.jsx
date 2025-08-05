@@ -8,6 +8,7 @@ import HeaderButton from "../../components/ui/HeaderButton"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
 import { Send, MessageCircle, Loader2, Info } from "lucide-react"
+import BackButton from "../../components/ui/BackButton";
 import { fetchChatHistory, sendChatMessage, clearChatHistory } from "../../api/chatAPI"
 
 export default function Chatbot() {
@@ -84,11 +85,15 @@ export default function Chatbot() {
       <Header />
 
       <main className="container mx-auto px-4 py-4 flex-1 flex flex-col max-w-3xl overflow-hidden">
-        <PageHeader
-          icon={MessageCircle}
-          title="AI Fitness Chatbot"
-          subtitle="Ask me anything about fitness, nutrition, or your workouts!"
-        />
+        <div className="flex items-center gap-4 mb-4">
+  <BackButton />
+  <PageHeader
+    icon={MessageCircle}
+    title="AI Fitness Chatbot"
+    subtitle="Ask me anything about fitness, nutrition, or your workouts!"
+    className="mb-0"
+  />
+</div>
         <div className="flex justify-end mb-2">
           <Button
             onClick={handleClearChat}

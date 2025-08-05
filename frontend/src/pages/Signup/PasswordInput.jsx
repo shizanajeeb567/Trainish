@@ -26,7 +26,7 @@ export default function PasswordInput({ value, onChange, showPassword, setShowPa
           {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
         </button>
       </div>
-      <p className="text-xs text-gray-500">Password should be at least 8 characters long</p>
+      <p className="text-xs text-gray-500">Password should be at least 8 characters long and should contain 1 special character at least.</p>
     </div>
   );
 }
