@@ -1,5 +1,3 @@
-// MealGeneration/MealPlanCard.jsx
-
 import {
   Card,
   CardHeader,
@@ -9,7 +7,7 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { List, RefreshCw, Trash2, Utensils } from "lucide-react";
-import { formatDate, getWeekDateRange } from "./utils";
+import { formatDate } from "./utils";
 
 export default function MealPlanCard({
   plan,
@@ -38,33 +36,31 @@ export default function MealPlanCard({
           <div>
             <CardTitle className="text-xl text-gray-800 flex items-center">
               <Utensils className="mr-2 h-5 w-5 text-purple-600" />
-              Meal Plan ({plan.planDuration})
+              3-Day Meal Plan
             </CardTitle>
             <CardDescription>
-  Select the start date and preferred cuisines for your 1-week plan.
-</CardDescription>
-
+              Select the start date and preferred cuisines for your 3-day plan.
+            </CardDescription>
           </div>
           <div className="flex gap-2">
-           <div className="relative group">
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={() => onRegeneratePlan(plan.id)}
-    disabled={plan.regenerationCount >= 2}
-    className={`border-purple-200 text-purple-600 hover:bg-purple-50 ${
-      plan.regenerationCount >= 2 ? "opacity-50 cursor-not-allowed" : ""
-    }`}
-  >
-    <RefreshCw className="h-4 w-4" />
-  </Button>
-
-  {plan.regenerationCount >= 2 && (
-    <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      You can regenerate only 2 times
-    </div>
-  )}
-</div>
+            <div className="relative group">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRegeneratePlan(plan.id)}
+                disabled={plan.regenerationCount >= 2}
+                className={`border-purple-200 text-purple-600 hover:bg-purple-50 ${
+                  plan.regenerationCount >= 2 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+              {plan.regenerationCount >= 2 && (
+                <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  You can regenerate only 2 times
+                </div>
+              )}
+            </div>
 
             <Button
               variant="outline"
@@ -90,9 +86,8 @@ export default function MealPlanCard({
               className="border border-purple-100 rounded-lg p-4 bg-purple-50/50"
             >
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-  Weekly Meal Plan ({getWeekDateRange(plan.startDate, 0)})
-</h3>
-
+                Meal Plan (Starting {formatDate(plan.startDate)})
+              </h3>
 
               {Array.isArray(week) ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
