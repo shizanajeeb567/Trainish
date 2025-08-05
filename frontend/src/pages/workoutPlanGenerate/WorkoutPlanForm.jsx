@@ -105,7 +105,7 @@ export default function WorkoutPlanForm({
           <div>
             <Label htmlFor="weeks" className="text-sm font-medium text-gray-700 flex items-center mb-2">
               <Calendar className="h-4 w-4 mr-1" />
-              Number of Weeks (1–12) *
+              Number of Weeks (1–4) *
             </Label>
             <Select
               value={preferences.weeks}
@@ -115,7 +115,7 @@ export default function WorkoutPlanForm({
                 <SelectValue placeholder="Select weeks" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: 12 }, (_, i) => (
+                {Array.from({ length: 4 }, (_, i) => (
                   <SelectItem key={i + 1} value={String(i + 1)}>
                     {i + 1} Week{i + 1 > 1 ? "s" : ""}
                   </SelectItem>
