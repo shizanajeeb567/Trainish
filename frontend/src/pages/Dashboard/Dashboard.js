@@ -31,7 +31,7 @@ export default function Dashboard() {
         gradient="from-purple-600 to-pink-600"
         headingSize="text-3xl sm:text-4xl"
         paragraphSize="text-lg"
-        padding="py-12"
+        padding="py-4"
       />
 
       <div className="max-w-6xl mx-auto px-4">

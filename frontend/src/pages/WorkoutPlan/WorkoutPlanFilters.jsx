@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
 import { Filter } from "lucide-react";
-import { getWeekDateRange } from "./utils/dateUtils";
 
 export default function WorkoutPlanFilters({
   selectedYear,
@@ -14,22 +13,13 @@ export default function WorkoutPlanFilters({
   setSelectedWeek,
 }) {
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
   ];
 
-  const weeks = [1, 2, 3, 4, 5];
+  const weeks = [1, 2, 3, 4]; // Show only Week 1 to 4
   const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
   const years = Array.from({ length: 5 }, (_, i) => currentYear + i);
 
   return (
@@ -54,11 +44,18 @@ export default function WorkoutPlanFilters({
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
               className="w-full h-10 px-3 py-2 border border-purple-200 rounded-md focus:border-purple-400 focus:ring-purple-400 bg-white"
             >
-              {months.map((month, index) => (
-                <option key={index} value={index}>
-                  {month}
-                </option>
-              ))}
+              {months.map((month, index) => {
+                if (
+                  selectedYear === currentYear &&
+                  index < currentMonth
+                ) return null;
+
+                return (
+                  <option key={index} value={index}>
+                    {month}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
@@ -75,7 +72,7 @@ export default function WorkoutPlanFilters({
             >
               {weeks.map((week) => (
                 <option key={week} value={week}>
-                  Week {week} ({getWeekDateRange(selectedYear, selectedMonth, week)})
+                  Week {week}
                 </option>
               ))}
             </select>

@@ -17,12 +17,7 @@ export default function RememberForgotRow() {
         />
         Remember me
       </label>
-      <Link
-        to="/forgot-password"
-        className="text-sm text-purple-600 hover:underline font-medium"
-      >
-        Forgot password?
-      </Link>
+    
     </div>
   );
 }

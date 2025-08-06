@@ -191,12 +191,13 @@ export default function GroceryList() {
                         {category}
                       </h4>
                       <span
-                        className={`text-purple-600 text-xl transform transition-transform duration-200 ${
-                          openGroups[category] ? "rotate-180" : ""
-                        }`}
-                      >
-                        ▼
-                      </span>
+  className={`text-purple-600 text-sm transform transition-transform duration-200 ${
+    openGroups[category] ? "rotate-180" : ""
+  }`}
+>
+  ▼
+</span>
+
                     </button>
 
                     {openGroups[category] && (
