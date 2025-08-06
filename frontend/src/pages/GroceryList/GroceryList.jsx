@@ -6,7 +6,6 @@ import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
@@ -15,6 +14,7 @@ import {
   ShoppingCart,
   ArrowLeft,
   Info,
+  FileDown,
 } from "lucide-react";
 import Header from "../../components/ui/header";
 import PageHeader from "../../components/ui/PageHeader";
@@ -22,7 +22,7 @@ import {
   getGroceryList,
   getLatestMealPlan,
 } from "../../api/groceryAPI";
-
+import { generateGroceryPDF } from "./utils/generateGroceryPDF";
 import HeaderButton from "../../components/ui/HeaderButton";
 
 export default function GroceryList() {
@@ -84,6 +84,10 @@ export default function GroceryList() {
     }
   };
 
+  const handleDownloadPDF = () => {
+    generateGroceryPDF(groceryItems);
+  };
+
   const groupedItems = groceryItems.reduce((acc, item) => {
     const category = item.category || "Other";
     if (!acc[category]) acc[category] = [];
@@ -94,7 +98,6 @@ export default function GroceryList() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       <Header />
-
       <main className="w-full max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
           <Button
@@ -169,11 +172,29 @@ export default function GroceryList() {
         {!loading && !error && groceryItems.length > 0 && (
           <Card className="border-0 bg-white/70 backdrop-blur-sm shadow-xl">
             <CardHeader className="pb-4">
-              <CardTitle className="text-xl text-gray-800 flex items-center">
-                <List className="mr-2 h-5 w-5 text-purple-600" />
-                Your Shopping List
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl text-gray-800 flex items-center">
+                  <List className="mr-2 h-5 w-5 text-purple-600" />
+                  Your Shopping List
+                </CardTitle>
+
+                {/* Download PDF icon button with tooltip */}
+                <div className="relative group">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleDownloadPDF}
+                    className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                  >
+                    <FileDown className="h-4 w-4" />
+                  </Button>
+                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                    Download PDF
+                  </div>
+                </div>
+              </div>
             </CardHeader>
+
             <CardContent>
               {Object.entries(groupedItems)
                 .sort(([a], [b]) => a.localeCompare(b))
@@ -191,13 +212,12 @@ export default function GroceryList() {
                         {category}
                       </h4>
                       <span
-  className={`text-purple-600 text-sm transform transition-transform duration-200 ${
-    openGroups[category] ? "rotate-180" : ""
-  }`}
->
-  ▼
-</span>
-
+                        className={`text-purple-600 text-sm transform transition-transform duration-200 ${
+                          openGroups[category] ? "rotate-180" : ""
+                        }`}
+                      >
+                        ▼
+                      </span>
                     </button>
 
                     {openGroups[category] && (
